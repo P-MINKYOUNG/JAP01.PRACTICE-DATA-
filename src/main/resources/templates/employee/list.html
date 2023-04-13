@@ -15,11 +15,11 @@
 			<th>이메일</th>
 			<th>전화번호</th>
 			<th>부서명</th>
-			<th>직급코드</th>
+			<th>직급명</th>
 			<th>급여등급</th>
 			<th>급여</th>
 			<th>보너스율</th>
-			<th>관리자사번</th>
+			<th>관리자</th>
 			<th>입사일</th>
 			<th>퇴사일</th>
 			<th>퇴직여부</th>
@@ -32,12 +32,12 @@
 			<td th:text="${employee.phone}"></td>
 			<td th:if="${employee.department != null}" th:text="${employee.department.deptTitle}"></td>
 			<td th:unless="${employee.department != null}"></td>
-			<td th:text="${employee.jobCode}"></td>
+			<td th:text="${employee.job.jobName}"></td>
 			<td th:text="${employee.salLevel}"></td>
 			<td th:text="${employee.salary}"></td>
 			<td th:text="${employee.bonus}"></td>
 			<td th:text="${employee.managerId}"></td>
-			<td th:value="${employee.hireDate}"></td>
+			<td th:text="${employee.hireDate}"></td>
 			<td th:text="${employee.entDate}"></td>
 			<td th:text="${employee.entYn}"></td>
 	</table>

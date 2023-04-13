@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+	<h1 align="center">REGIST EMPLOYEE</h1>
+	<form action="/employee/regist" method="post" style="margin-left:43%; margin-top:3%;">
+		<label>사원번호 : </label>
+		<input type="text" name="empId"><br><br>
+		<label>사원명 : </label>
+		<input type="text" name="empName"><br><br>
+		<label>주민등록번호 : </label>
+		<input type="text" name="empNo"><br><br>
+		<label>이메일 : </label>
+		<input type="text" name="email"><br><br>
+		<label>전화번호 : </label>
+		<input type="text" name="phone"><br><br>
+		<label>부서명 : </label>
+		<select name="deptId" id="deptId">
+		</select><br><br>
+		<label>직급 : </label>
+		<select name="jobCode" id="jobCode">
+		</select><br><br>
+		<label>월급레벨 : </label>
+		<select name="salLevel" id="salLevel">
+		</select><br><br>
+		S1 : 600만원 ~ 1000만원<br>
+		S2 : 500만원 ~ 5999999원<br>
+		S3 : 400만원 ~ 4999999원<br>
+		S4 : 300만원 ~ 3999999원<br>
+		S5 : 200만원 ~ 2999999원<br>
+		S6 : 100만원 ~ 1999999원<br>
+		<br>
+		<label>월급 : </label>
+		<input type="number" name="salary"><br><br>
+		<label>보너스 : </label>
+		<input type="number" name="bonus"><br><br>
+		<label>관리자명 : </label>
+		<select name="managerId" id="managerId">
+		</select><br><br>
+		<label>입사일 : </label>
+		<input type="date" name="hireDate"><br><br>
+		<label>퇴사일 : </label>
+		<input type="date" name="entDate"><br><br>
+		<label>퇴사 여부 : </label>
+		<select name="entYn" id="entYn">
+			<option value="Y">퇴사</option>
+			<option value="N">재직</option>
+		</select><br><br>
+		<input type="submit" value="등록">
+	</form>
+	
+	<script>
+		$(function(){
+			$.ajax({
+				url : '/employee/department',
+				success : function(data){
+					console.log(data);
+					
+					let html = '';
+					
+					for(let index in data){
+						html += `<option value='${data[index].deptId}'>${data[index].deptTitle}</option>`;
+					}
+					
+					document.querySelector("#deptId").insertAdjacentHTML('beforeend', html);
+				},
+				error : function(xhr){
+					console.log(xhr);
+				}
+			});
+		})
+		
+		$(function(){
+			$.ajax({
+				url : '/employee/job',
+				success : function(data){
+					console.log(data);
+					
+					let html = '';
+					
+					for(let index in data){
+						html += `<option value='${data[index].jobCode}'>${data[index].jobName}</option>`;
+					}
+					
+					document.querySelector("#jobCode").insertAdjacentHTML('beforeend', html);
+				},
+				error : function(xhr){
+					console.log(xhr);
+				}
+			});
+		})
+		
+		$(function(){
+			$.ajax({
+				url : '/employee/salGrade',
+				success : function(data){
+					console.log(data);
+					
+					let html = '';
+					
+					for(let index in data){
+						html += `<option value='${data[index].salLevel}'>${data[index].salLevel}</option>`;
+					}
+					
+					document.querySelector("#salLevel").insertAdjacentHTML('beforeend', html);
+				},
+				error : function(xhr){
+					console.log(xhr);
+				}
+			});
+		})
+		
+		$(function(){
+			$.ajax({
+				url : '/employee/name',
+				success : function(data){
+					console.log(data);
+					
+					let html = '';
+					
+					for(let index in data){
+						html += `<option value='${data[index].empId}'>${data[index].empName}</option>`;
+					}
+					
+					document.querySelector("#managerId").insertAdjacentHTML('beforeend', html);
+				},
+				error : function(xhr){
+					console.log(xhr);
+				}
+			});
+		})
+	</script>
+</body>
+</html>

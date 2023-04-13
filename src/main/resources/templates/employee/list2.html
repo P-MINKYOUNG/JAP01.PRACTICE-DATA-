@@ -6,7 +6,7 @@
 </head>
 <body>
 	<h1 align="center">직원 조회 결과</h1>
-	<button onclick="location.href='/main'" style="width:50px; height:50px; border-radius:50%; float:right; margin-right:10%;">메인으로</button><br>
+	<button onclick="location.href='/main'" style="width:50px; height:50px; border-radius:50%; float:right; margin-right:20%;">메인으로</button><br>
 	<table border="1" style="margin-left:auto;margin-right:auto; margin-top:3%; margin-bottom:3%">
 		<tr>
 			<th>사원번호</th>
@@ -15,7 +15,7 @@
 			<th>이메일</th>
 			<th>전화번호</th>
 			<th>부서명</th>
-			<th>직급코드</th>
+			<th>직급명</th>
 			<th>급여등급</th>
 			<th>급여</th>
 			<th>보너스율</th>
@@ -32,7 +32,7 @@
 			<td th:text="${employee.phone}"></td>
 			<td th:if="${employee.department != null}" th:text="${employee.department.deptTitle}"></td>
 			<td th:unless="${employee.department != null}"></td>
-			<td th:text="${employee.jobCode}"></td>
+			<td th:text="${employee.job.jobName}"></td>
 			<td th:text="${employee.salLevel}"></td>
 			<td th:text="${employee.salary}"></td>
 			<td th:text="${employee.bonus}"></td>

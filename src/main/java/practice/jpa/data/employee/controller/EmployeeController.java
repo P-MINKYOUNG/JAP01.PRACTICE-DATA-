@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import practice.jpa.data.common.Pagenation;
 import practice.jpa.data.common.PagingButtonInfo;
+import practice.jpa.data.employee.dto.DepartmentDTO;
 import practice.jpa.data.employee.dto.EmployeeDTO;
+import practice.jpa.data.employee.dto.JobDTO;
+import practice.jpa.data.employee.dto.SalGradeDTO;
 import practice.jpa.data.employee.service.EmployeeService;
 
 @Controller
@@ -82,4 +85,36 @@ public class EmployeeController {
 
 		return "employee/list2";
 	}
+	
+	/* 새로운 직원 등록 */
+	@GetMapping("/regist")
+	public void registPage() {}
+	
+	/* 선택을 위한 값 받아오기 */
+	@GetMapping(value="/department", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public List<DepartmentDTO> selectDepartment(){
+		return employeeService.selectDepartment();
+	}
+	
+	@GetMapping(value="/job", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public List<JobDTO> selectJob(){
+		return employeeService.selectJob();
+	}
+	
+	@GetMapping(value="/salGrade", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public List<SalGradeDTO> selectSalGrade(){
+		return employeeService.selectSalGrade();
+	}
+	
+	@PostMapping("/regist")
+	public String registEmployee(EmployeeDTO employee) {
+		
+		employeeService.registEmployee(employee);
+		
+		return "redirect:/employee/list2";
+	}
+	
 }
