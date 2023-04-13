@@ -1,0 +1,24 @@
+#server port config
+server:
+  port: 8021
+  
+#db config
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: C##EMPLOYEE
+    password: EMPLOYEE
+ 
+# jpa config
+  jpa:
+    #ddl 자동 생성
+    generate-ddl: false
+    #sql 구문 보여주기
+    show-sql: true
+    database: oracle
+    properties:
+      hibernate:
+        #sql 보여줄 때 개행
+        '[format_sql]': true
+        
