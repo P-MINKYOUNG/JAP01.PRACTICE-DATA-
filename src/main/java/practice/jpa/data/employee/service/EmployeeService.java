@@ -105,4 +105,10 @@ public class EmployeeService {
 		
 	}
 
+	/* 삭제 */
+	public void deleteEmployee(EmployeeDTO employee) {
+
+		employeeRepository.deleteById(employee.getEmpId());
+	}
+
 }

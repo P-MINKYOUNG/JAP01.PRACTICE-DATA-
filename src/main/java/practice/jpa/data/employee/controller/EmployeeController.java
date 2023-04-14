@@ -109,12 +109,25 @@ public class EmployeeController {
 		return employeeService.selectSalGrade();
 	}
 	
+	/* 새로운 사원 등록 */
 	@PostMapping("/regist")
 	public String registEmployee(EmployeeDTO employee) {
 		
 		employeeService.registEmployee(employee);
 		
-		return "redirect:/employee/list2";
+		return "redirect:/";
 	}
 	
+	/* 사원 삭제 */
+	@GetMapping("/delete")
+	public void deletePage() {}
+	
+	@PostMapping("/delete")
+	public String deleteEmployee(EmployeeDTO employee) {
+		
+		employeeService.deleteEmployee(employee);
+		
+		return "redirect:/";
+		
+	}
 }
