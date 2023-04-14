@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import practice.jpa.data.employee.dto.DepartmentDTO;
 import practice.jpa.data.employee.dto.EmployeeDTO;
@@ -69,11 +70,14 @@ public class EmployeeService {
 	}
 
 	/* 입사일 비교(QueryMethod) */
-	public List<EmployeeDTO> searchByDate(Date date) {
+	public Page<EmployeeDTO> searchByDate(Date date, Pageable pageable) {
 
-		List<Employee> employeeList = employeeRepository.findByHireDateGreaterThan(date, Sort.by("empId").ascending());
+		pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1,
+				pageable.getPageSize(), Sort.by("empId").ascending());
+		
+		Page<Employee> employeeList = employeeRepository.findByHireDateGreaterThan(date, pageable);
 
-		return employeeList.stream().map(row -> modelMapper.map(row, EmployeeDTO.class)).collect(Collectors.toList());
+		return employeeList.map(row -> modelMapper.map(row, EmployeeDTO.class));
 	}
 	
 	/* 저장을 위한 목록 조회 */
@@ -99,6 +103,7 @@ public class EmployeeService {
 	}
 
 	/* 저장 */
+	@Transactional
 	public void registEmployee(EmployeeDTO employee) {
 		
 		employeeRepository.save(modelMapper.map(employee, Employee.class));
@@ -106,9 +111,37 @@ public class EmployeeService {
 	}
 
 	/* 삭제 */
+	@Transactional
 	public void deleteEmployee(EmployeeDTO employee) {
 
 		employeeRepository.deleteById(employee.getEmpId());
+	}
+
+	public EmployeeDTO modifyName(EmployeeDTO employee) {
+		
+		Employee selectedEmployee = employeeRepository.findById(employee.getEmpId()).orElseThrow(IllegalArgumentException::new);
+		
+		return modelMapper.map(selectedEmployee, EmployeeDTO.class);
+	}
+
+	/* 수정 */
+	@Transactional
+	public void modifyEmployee(EmployeeDTO employee) {
+		
+		Employee employee2 = employeeRepository.findById(employee.getEmpId()).orElseThrow(IllegalArgumentException::new);
+		
+		
+		employee2.setBonus(employee.getBonus());
+		employee2.setDepartment(modelMapper.map(employee.getDepartment(), Department.class));
+		employee2.setEmail(employee.getEmail());
+		employee2.setEntDate(employee.getEntDate());
+		employee2.setEntYn(employee.getEntYn());
+		employee2.setHireDate(employee.getHireDate());
+		employee2.setJob(modelMapper.map(employee.getJob(), Job.class));
+		employee2.setManagerId(employee.getManagerId());
+		employee2.setPhone(employee.getPhone());
+		employee2.setSalary(employee.getSalary());
+		employee2.setSalGrade(modelMapper.map(employee.getSalGrade(), SalGrade.class));
 	}
 
 }

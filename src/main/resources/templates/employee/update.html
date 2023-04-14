@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+	<h1 align="center">MODIFY EMPLOYEE</h1>
+	<form action="/employee/update" method="post" style="margin-left:43%; margin-top:3%;">
+		<label>사원명 : </label>
+		<select name="empId" id="empId">
+		</select><br><br>
+		<label>주민등록번호 : </label>
+		<input type="text" name="empNo" id="empNo"><br><br>
+		<label>이메일 : </label>
+		<input type="text" name="email" id="email"><br><br>
+		<label>전화번호 : </label>
+		<input type="text" name="phone" id="phone"><br><br>
+		<label>부서명 : </label>
+		<select name="department.deptId" id="deptId">
+		</select><br><br>
+		<label>직급 : </label>
+		<select name="job.jobCode" id="jobCode">
+		</select><br><br>
+		<label>월급레벨 : </label>
+		<select name="salGrade.salLevel" id="salLevel">
+		</select><br><br>
+		S1 : 600만원 ~ 1000만원<br>
+		S2 : 500만원 ~ 5999999원<br>
+		S3 : 400만원 ~ 4999999원<br>
+		S4 : 300만원 ~ 3999999원<br>
+		S5 : 200만원 ~ 2999999원<br>
+		S6 : 100만원 ~ 1999999원<br>
+		<br>
+		<label>월급 : </label>
+		<input type="number" name="salary" id="salary"><br><br>
+		<label>보너스 : </label>
+		<input type="number" name="bonus" id="bonus"><br><br>
+		<label>관리자명 : </label>
+		<select name="managerId" id="managerId">
+		</select><br><br>
+		<label>입사일 : </label>
+		<input type="date" name="hireDate" id="hireDate"><br><br>
+		<label>퇴사일 : </label>
+		<input type="date" name="entDate" id="endDate"><br><br>
+		<label>퇴사 여부 : </label>
+		<select name="entYn" id="entYn">
+			<option value="Y">퇴사</option>
+			<option value="N">재직</option>
+		</select><br><br>
+		<input type="submit" value="등록">
+	</form>
+	
+	<script>
+		$(function(){
+			$.ajax({
+				url : '/employee/department',
+				success : function(data){
+					console.log(data);
+					
+					let html = '';
+					
+					for(let index in data){
+						html += `<option value='${data[index].deptId}'>${data[index].deptTitle}</option>`;
+					}
+					
+					document.querySelector("#deptId").insertAdjacentHTML('beforeend', html);
+				},
+				error : function(xhr){
+					console.log(xhr);
+				}
+			});
+		})
+		
+		$(function(){
+			$.ajax({
+				url : '/employee/job',
+				success : function(data){
+					console.log(data);
+					
+					let html = '';
+					
+					for(let index in data){
+						html += `<option value='${data[index].jobCode}'>${data[index].jobName}</option>`;
+					}
+					
+					document.querySelector("#jobCode").insertAdjacentHTML('beforeend', html);
+				},
+				error : function(xhr){
+					console.log(xhr);
+				}
+			});
+		})
+		
+		$(function(){
+			$.ajax({
+				url : '/employee/salGrade',
+				success : function(data){
+					console.log(data);
+					
+					let html = '';
+					
+					for(let index in data){
+						html += `<option value='${data[index].salLevel}'>${data[index].salLevel}</option>`;
+					}
+					
+					document.querySelector("#salLevel").insertAdjacentHTML('beforeend', html);
+				},
+				error : function(xhr){
+					console.log(xhr);
+				}
+			});
+		})
+		
+		$(function(){
+			$.ajax({
+				url : '/employee/name',
+				success : function(data){
+					console.log(data);
+					
+					let html = '';
+					
+					for(let index in data){
+						html += `<option value='${data[index].empId}'>${data[index].empName}</option>`;
+					}
+					
+					document.querySelector("#managerId").insertAdjacentHTML('beforeend', html);
+					document.querySelector("#empId").insertAdjacentHTML('beforeend', html);
+
+				},
+				error : function(xhr){
+					console.log(xhr);
+				}
+			});
+		})
+		
+		$("#empId").on("change", function(){
+            
+            let empId =$("#empId").val(); 
+            
+            $.ajax({
+               
+               url : '/employee/modifyName',
+               dataType: 'json',
+               data: {
+                  empId: empId
+               },
+               success : function(data){
+            	   console.log(data.department.deptTitle);
+            	   $("#empNo").attr("value", data.empNo);
+            	   $("#email").attr("value", data.email);
+            	   $("#phone").attr("value", data.phone);
+                   $("#deptId").val(data.department.deptId).prop("selected", true);
+                   $("#jobCode").val(data.job.jobCode).prop("selected", true);
+                   $("#salLevel").val(data.salGrade.salLevel).prop("selected", true);
+                   $("#salary").attr("value", data.salary);
+                   $("#bonus").attr("value", data.bonus);
+                   $("#managerId").attr("value", data.managerId);
+                   $("#hireDate").val(data.hireDate).prop("selected", true);
+                   $("#entDate").val(data.entDate).prop("selected", true);
+                   $("#entYn").val(data.entYn).prop("selected", true);
+               },
+               error : function(xhr){
+                  console.log(xhr);
+               }
+               
+            })
+            
+         });
+	</script>
+</body>
+</html>

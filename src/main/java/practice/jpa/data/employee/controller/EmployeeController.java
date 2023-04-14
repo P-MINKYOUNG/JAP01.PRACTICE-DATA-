@@ -74,16 +74,19 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/hireDate")
-	public String searchByDate(String hireDate, Model model) throws ParseException {
+	public String searchByDate(String hireDate, @PageableDefault Pageable pageable, Model model) throws ParseException {
 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = formatter.parse(hireDate);
 
-		List<EmployeeDTO> employeeList = employeeService.searchByDate(date);
+		Page<EmployeeDTO> employeeList = employeeService.searchByDate(date, pageable);
+		
+		PagingButtonInfo paging = Pagenation.getPagingButtonInfo(employeeList);
 
+		model.addAttribute("paging", paging);
 		model.addAttribute("employeeList", employeeList);
 
-		return "employee/list2";
+		return "employee/list";
 	}
 	
 	/* 새로운 직원 등록 */
@@ -115,7 +118,7 @@ public class EmployeeController {
 		
 		employeeService.registEmployee(employee);
 		
-		return "redirect:/";
+		return "redirect:/employee/list";
 	}
 	
 	/* 사원 삭제 */
@@ -127,7 +130,25 @@ public class EmployeeController {
 		
 		employeeService.deleteEmployee(employee);
 		
-		return "redirect:/";
+		return "redirect:/employee/list";
 		
+	}
+	
+	/* 사원 정보 수정 */
+	@GetMapping("/update")
+	public void updatePage() {}
+	
+	@GetMapping(value="/modifyName", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public EmployeeDTO modifyName(EmployeeDTO employee) {
+		return employeeService.modifyName(employee);
+	}
+	
+	@PostMapping("/update")
+	public String updateEmployee(EmployeeDTO employee) {
+		
+		employeeService.modifyEmployee(employee);
+		
+		return "redirect:/employee/list";
 	}
 }
